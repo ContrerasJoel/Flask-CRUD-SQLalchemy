@@ -1,4 +1,5 @@
 from crypt import methods
+import email
 from flask import Blueprint, render_template, request, redirect, url_for
 from models.contact import Contact
 from utils.db import db
@@ -25,9 +26,21 @@ def add_contacts():
 
     return redirect(url_for('contacts.index'))
 
-@contacts.route('/update/<id>', methods = ['POST', 'GET'])
+@contacts.route('/update/<id>', methods=['POST', 'GET'])
 def update(id):
     contact = Contact.query.get(id)
+
+    if request.method == 'POST':
+        contact = Contact.query.get(id)
+        contact.fullname = request.form["fullname"]
+        contact.email = request.form["email"]
+        contact.phone = request.form["phone"]
+
+        db.session.commit()
+
+        return redirect(url_for("contacts.index"))
+
+    
     return render_template('update.html', contact=contact)
 
 @contacts.route('/delete/<id>')
