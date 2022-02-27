@@ -59,3 +59,8 @@ def delete(id):
 @contacts.route("/about")
 def about():
     return render_template('About.html')
+
+@contacts.route("/whatsapp")
+def notification():
+    return render_template('whatsapp.html')
+
